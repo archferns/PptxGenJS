@@ -160,6 +160,7 @@ var PptxGenJS = function(){
 	var AXIS_ID_CATEGORY_PRIMARY = '2094734554';
 	var AXIS_ID_CATEGORY_SECONDARY = '2094734555';
     var AXIS_ID_SERIES_PRIMARY = '2094734556';
+  var DEF_PARA_INDENT = 27; // Default para indent for bullets was defined as 342900 EMU which translates to 27 points with one point being equal to 12700 EMU
 
 	// A: Create internal pptx object
 	var gObjPptx = {};
@@ -4152,7 +4153,7 @@ var PptxGenJS = function(){
 
 	function genXmlParagraphProperties(textObj, isDefault) {
 		var strXmlBullet = '', strXmlLnSpc = '', strXmlParaSpc = '', paraPropXmlCore = '';
-		var bulletLvl0Margin = 342900;
+		var bulletLvl0Margin = DEF_PARA_INDENT * ONEPT;
 		var tag = isDefault ? 'a:lvl1pPr' : 'a:pPr';
 
 		var paragraphPropXml = '<' + tag + (textObj.options.rtlMode ? ' rtl="1" ' : '');
@@ -4179,6 +4180,10 @@ var PptxGenJS = function(){
 						paragraphPropXml += ' algn="just"';
 						break;
 				}
+			}
+
+			if (textObj.options.paraIndent) {
+				bulletLvl0Margin = textObj.options.paraIndent * ONEPT;
 			}
 
 			if ( textObj.options.lineSpacing ) {
